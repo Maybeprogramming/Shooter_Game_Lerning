@@ -20,6 +20,27 @@ namespace Task_Test
             SetWindowSize(40, 40);
             SetBufferSize(40, 40);
 
+
+            //StartGameShooter();
+
+            Vector2D vector1 = new Vector2D(2.0f, 3.0f);
+            Vector2D vector2 = new Vector2D(-1.0f, 2.0f);
+            Vector2D vector3;
+
+            vector3 = vector1 + vector2;
+            Console.WriteLine(vector3);
+            vector3 = vector1 - vector2;
+            Console.WriteLine(vector3);
+            vector3 = vector1 * vector2;
+            Console.WriteLine(vector3);
+            vector3 = vector1 / vector2;
+            Console.WriteLine(vector3);
+
+            ReadKey();
+        }
+
+        private static void StartGameShooter()
+        {
             while (true)
             {
                 player.Draw();
@@ -68,8 +89,6 @@ namespace Task_Test
                 player.Draw();
                 playerDirectionViev.Draw();
             }
-
-            ReadKey();
         }
 
         static public void Shoot(Direction directionShoot, int delayMs, Pixel player, Pixel bullet)
