@@ -1,6 +1,6 @@
 ﻿namespace Task_Test
 {
-    internal class Vector2D
+    internal struct Vector2D
     {
         public float X { get; }
         public float Y { get; }
