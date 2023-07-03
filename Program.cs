@@ -30,6 +30,8 @@ namespace Task_Test
             char[] screen = new char[width * heigh + 1];
             screen[width * heigh] = '\0';
 
+            ReadKey();
+
             for (int t = 0; t < 10000; t++)
             {
                 screenBuild.Clear();
@@ -62,6 +64,7 @@ namespace Task_Test
                     }
                 }
 
+                //Thread.Sleep(10);
                 screenBuild.Append(screen);
                 Write(screenBuild);
             }
