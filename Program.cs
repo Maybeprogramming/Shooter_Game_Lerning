@@ -15,7 +15,14 @@ namespace Task_Test
         static Direction shootDirection = Direction.Right;
         #endregion
 
+
         static void Main()
+        {
+            //PrintObject3D();
+            StartGameShooter();
+        }
+
+        private static void PrintObject3D()
         {
             StringBuilder screenBuild = new StringBuilder();
             CursorVisible = false;
@@ -45,7 +52,7 @@ namespace Task_Test
                         Vector3D ro = new Vector3D(-2, 0, 0);
                         Vector3D rd = FVec.Norm(new Vector3D(1, uv));
                         uv = new Vector2D(uv.X * aspect * pixelAspect, uv.Y);
-                        uv = new Vector2D((float)(uv.X + Math.Sin(t * 0.001f)));                      
+                        uv = new Vector2D((float)(uv.X + Math.Sin(t * 0.001f)));
                         char pixel = ' ';
                         int color = 0;
                         Vector2D intersection = FVec.Sphere(ro, rd, 1);
