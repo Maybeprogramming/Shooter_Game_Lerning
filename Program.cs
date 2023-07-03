@@ -1,50 +1,70 @@
-﻿using static System.Console;
+﻿using System.Text;
+using static System.Console;
 
 namespace Task_Test
 {
     internal class Program
     {
+        #region Shooter Game
         static ConsoleColor playerColor = ConsoleColor.Green;
         static ConsoleColor playerDirectionColor = ConsoleColor.Blue;
         static ConsoleColor bulletColor = ConsoleColor.Red;
-
         static Pixel player = new Pixel(10, 10, playerColor);
         static Pixel playerDirectionViev = new Pixel(player.X, player.Y, playerDirectionColor);
         static Pixel bullet = new Pixel(playerDirectionViev.X, playerDirectionViev.Y, bulletColor, '*');
-
         static Direction shootDirection = Direction.Right;
+        #endregion
 
         static void Main()
         {
+            StringBuilder screenBuild = new StringBuilder();
             CursorVisible = false;
-            SetWindowSize(40, 40);
-            SetBufferSize(40, 40);
+            int width = 120;
+            int heigh = 30;
+            SetWindowSize(width, heigh);
+            SetBufferSize(120, 30);
+            float aspect = (float)width / heigh;
+            float pixelAspect = 7f / 14.0f;
+            char[] gradient = { ' ', '.', ':', '!', '/', 'r', '(', 'l', '1', 'Z', '4', 'H', '9', '@', '8', '$', '@' };
+            int gradientSize = gradient.Length - 2;
+            char[] screen = new char[width * heigh + 1];
+            screen[width * heigh] = '\0';
 
+            for (int t = 0; t < 10000; t++)
+            {
+                screenBuild.Clear();
+                Vector3D light = FVec.Norm(new Vector3D((float)Math.Sin(t * 0.001f), (float)Math.Cos(t * 0.001), -1.0f));
 
-            //StartGameShooter();
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < heigh; j++)
+                    {
+                        Vector2D uv = new Vector2D(i, j) / new Vector2D(width, heigh) * 2.0f - 1.0f;
+                        Vector3D ro = new Vector3D(-2, 0, 0);
+                        Vector3D rd = FVec.Norm(new Vector3D(1, uv));
+                        uv = new Vector2D(uv.X * aspect * pixelAspect, uv.Y);
+                        uv = new Vector2D((float)(uv.X + Math.Sin(t * 0.001f)));                      
+                        char pixel = ' ';
+                        int color = 0;
+                        Vector2D intersection = FVec.Sphere(ro, rd, 1);
 
-            Vector2D vector1 = new Vector2D(2.0f, 3.0f);
-            Vector2D vector2 = new Vector2D(-1.0f, 2.0f);
-            Vector2D vector3;
+                        if (intersection.X > 0)
+                        {
+                            Vector3D itPoint = ro + rd * intersection.X;
+                            Vector3D n = FVec.Norm(itPoint);
+                            float diff = FVec.Dot(n, light);
+                            color = (int)(diff * 20);
+                        }
 
-            vector3 = vector1 + vector2;
-            Console.WriteLine(vector3);
-            vector3 = vector1 - vector2;
-            Console.WriteLine(vector3);
-            vector3 = vector1 * vector2;
-            Console.WriteLine(vector3);
-            vector3 = vector1 / vector2;
-            Console.WriteLine(vector3);
-            Console.WriteLine();
-            vector1 = -vector1;
-            Console.WriteLine(vector1);
+                        color = (Int32)FVec.Clamp(color, 0, gradientSize);
+                        pixel = gradient[color];
+                        screen[i + j * width] = pixel;
+                    }
+                }
 
-            Vector3D vector3D = new Vector3D(2, 3, 5);
-
-            float lengthVec3D = FVec.Length(vector3D);
-            Console.WriteLine("Длина вектора равна: " + lengthVec3D);
-
-            ReadKey();
+                screenBuild.Append(screen);
+                Write(screenBuild);
+            }
         }
 
         private static void StartGameShooter()
@@ -98,6 +118,7 @@ namespace Task_Test
                 playerDirectionViev.Draw();
             }
         }
+
 
         static public void Shoot(Direction directionShoot, int delayMs, Pixel player, Pixel bullet)
         {
@@ -219,3 +240,82 @@ struct Pixel
         Console.Write(PixelEmpty);
     }
 }
+
+//static void Main()
+//{
+//    CursorVisible = false;
+
+//    int width = 120;
+//    int height = 30;
+//    SetWindowSize(width, height);
+//    SetBufferSize(120, 30);
+//    float aspect = (float)width / height;
+//    //соотношение сторон символа:
+//    float pixelAspect = 7.0f / 14.0f;
+//    char[] gradient = { ' ', '.', ':', '!', '/', 'r', '(', 'l', '1', 'Z', '4', 'H', '9', '@', '8', '$', '@' };
+//    int gradientSize = gradient.Length - 2;
+
+//    char[] screen = new char[width * height];
+
+//    for (int t = 0; t < 10000; t++)
+//    {
+//        Vector3D light = FVec.Norm(new Vector3D(-0.5f, 0.5f, -1.0f));
+//        Vector3D spherePos = new Vector3D(0f, 3f, 0f);
+//        for (int i = 0; i < width; i++)
+//        {
+//            for (int j = 0; j < height; j++)
+//            {
+//                Vector2D uv = new Vector2D(i, j) / new Vector2D(width, height) * 2.0f - 1.0f;
+//                uv = new Vector2D(uv.X * aspect * pixelAspect, uv.Y);
+//                Vector3D ro = new Vector3D(-6f, 0f, 0f);
+//                Vector3D rd = FVec.Norm(new Vector3D(2f, uv));
+//                ro = FVec.RotateY(ro, 0.25f);
+//                rd = FVec.RotateY(rd, 0.25f);
+//                ro = FVec.RotateZ(ro, t * 0.01f);
+//                rd = FVec.RotateZ(rd, t * 0.01f);
+//                float diff = 1;
+//                for (int k = 0; k < 5; k++)
+//                {
+//                    float minIt = 99999;
+//                    Vector2D intersection = FVec.Sphere(ro - spherePos, rd, 1);
+//                    Vector3D n = new Vector3D(0f);
+//                    float albedo = 1;
+//                    if (intersection.X > 0)
+//                    {
+//                        Vector3D itPoint = ro - spherePos + rd * intersection.X;
+//                        minIt = intersection.X;
+//                        n = FVec.Norm(itPoint);
+//                    }
+//                    Vector3D boxN = new Vector3D(0f);
+//                    intersection = FVec.Box(ro, rd, new Vector3D(1f), ref boxN);
+//                    if (intersection.X > 0 && intersection.X < minIt)
+//                    {
+//                        minIt = intersection.X;
+//                        n = boxN;
+//                    }
+//                    intersection = new Vector2D(FVec.Plane(ro, rd, new Vector3D(0f, 0f, -1f), 1f));
+//                    if (intersection.X > 0 && intersection.X < minIt)
+//                    {
+//                        minIt = intersection.X;
+//                        n = new Vector3D(0f, 0f, -1f);
+//                        albedo = 0.5f;
+//                    }
+//                    if (minIt < 99999)
+//                    {
+//                        diff *= (FVec.Dot(n, light) * 0.5f + 0.5f) * albedo;
+//                        ro = ro + rd * (minIt - 0.01f);
+//                        rd = FVec.Reflect(rd, n);
+//                    }
+//                    else break;
+//                }
+//                int color = (int)(diff * 20);
+//                color = (Int32)FVec.Clamp(color, 0f, gradientSize);
+//                char pixel = gradient[color];
+//                screen[i + j * width] = pixel;
+//            }
+//        }
+//        screen[width * height - 1] = '\0';
+//        Write(screen);
+//        ReadKey();
+//    }
+//}

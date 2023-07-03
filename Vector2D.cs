@@ -27,9 +27,19 @@
             return new Vector2D(vectorA.X - vectorB.X, vectorA.Y - vectorB.Y);
         }
 
+        public static Vector2D operator -(Vector2D vectorA,  float value)
+        {
+            return new Vector2D(vectorA.X - value, vectorA.Y - value);
+        }
+
         public static Vector2D operator *(Vector2D vectorA, Vector2D vectorB)
         {
             return new Vector2D(vectorA.X * vectorB.X, vectorA.Y * vectorB.Y);
+        }
+
+        public static Vector2D operator *(Vector2D vectorA, float value)
+        {
+            return new Vector2D(vectorA.X * value, vectorA.Y * value);
         }
 
         public static Vector2D operator /(Vector2D vectorA, Vector2D vectorB)
