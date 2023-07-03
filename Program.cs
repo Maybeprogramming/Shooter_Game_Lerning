@@ -79,6 +79,12 @@ namespace Task_Test
 
         private static void StartGameShooter()
         {
+            int height = 30;
+            int width = 50;
+            Console.SetWindowSize(width, height);
+            Console.SetBufferSize(width, height);
+            Console.CursorVisible = false;
+
             while (true)
             {
                 player.Draw();
@@ -120,10 +126,13 @@ namespace Task_Test
                         break;
 
                     case ConsoleKey.Spacebar:
-                        Task.Run(() => Shoot(shootDirection, 100, player, bullet));
+                        if (player.X >= 3 && player.X <= width - 3 && player.Y >= 3 && player.Y <= height - 3)
+                            Task.Run(() => Shoot(shootDirection, 50, player, bullet));
                         break;
                 }
 
+                SetCursorPosition(0, 0);
+                Write($"X: {player.X}|Y: {player.Y}   ");
                 player.Draw();
                 playerDirectionViev.Draw();
             }
@@ -139,12 +148,12 @@ namespace Task_Test
                 case Direction.Up:
                     bullet = new Pixel(player.X, player.Y - 2, bulletColor);
 
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 30; i++)
                     {
                         bullet.Clear();
                         bullet = new Pixel(bullet.X, bullet.Y - 1, bulletColor, '*');
 
-                        if (bullet.Y <= 0)
+                        if (bullet.Y <= 3)
                         {
                             break;
                         }
@@ -157,12 +166,12 @@ namespace Task_Test
                     bullet = new Pixel(player.X, player.Y + 2, bulletColor);
 
 
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 30; i++)
                     {
                         bullet.Clear();
                         bullet = new Pixel(bullet.X, bullet.Y + 1, bulletColor, '*');
 
-                        if (bullet.Y >= 39)
+                        if (bullet.Y >= 30 - 3)
                         {
                             break;
                         }
@@ -174,12 +183,12 @@ namespace Task_Test
                 case Direction.Right:
                     bullet = new Pixel(player.X + 2, player.Y, bulletColor);
 
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 30; i++)
                     {
                         bullet.Clear();
                         bullet = new Pixel(bullet.X + 1, bullet.Y, bulletColor, '*');
 
-                        if (bullet.X >= 39)
+                        if (bullet.X >= 50 - 3)
                         {
                             break;
                         }
@@ -191,12 +200,12 @@ namespace Task_Test
                 case Direction.Left:
                     bullet = new Pixel(player.X - 2, player.Y, bulletColor);
 
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 30; i++)
                     {
                         bullet.Clear();
                         bullet = new Pixel(bullet.X - 1, bullet.Y, bulletColor, '*');
 
-                        if (bullet.X <= 0)
+                        if (bullet.X <= 3)
                         {
                             break;
                         }
