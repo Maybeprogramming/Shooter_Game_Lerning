@@ -37,6 +37,11 @@
             return new Vector2D(vectorA.X / vectorB.X, vectorA.Y / vectorB.Y);
         }
 
+        public static Vector2D operator -(Vector2D vectorA)
+        {
+            return new Vector2D(-vectorA.X, -vectorA.Y);
+        }
+
         public override string ToString()
         {
             return $"X: {X}, Y: {Y}";

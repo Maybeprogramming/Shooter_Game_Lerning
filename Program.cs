@@ -35,6 +35,14 @@ namespace Task_Test
             Console.WriteLine(vector3);
             vector3 = vector1 / vector2;
             Console.WriteLine(vector3);
+            Console.WriteLine();
+            vector1 = -vector1;
+            Console.WriteLine(vector1);
+
+            Vector3D vector3D = new Vector3D(2, 3, 5);
+
+            float lengthVec3D = FVec.Length(vector3D);
+            Console.WriteLine("Длина вектора равна: " + lengthVec3D);
 
             ReadKey();
         }
